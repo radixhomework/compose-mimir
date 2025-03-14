@@ -1,0 +1,35 @@
+services:
+  minio:
+    image: minio/minio:RELEASE.2025-03-12T18-04-18Z
+    entrypoint: [""]
+    command: ["sh", "-c", "mkdir -p /data/mimir && minio server --quiet /data"]
+    environment:
+      - MINIO_ROOT_USER=${MIMIR_USER}
+      - MINIO_ROOT_PASSWORD=${MIMIR_PASSWORD}
+    volumes:
+      - minio:/data
+    healthcheck:
+      test: [ "CMD", "mc", "ready", "local" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  mimir:
+    image: grafana/mimir:2.15.1
+    ports:
+      - "${MIMIR_PORT}:8080"
+    command: ["-config.file=/etc/mimir.yaml", "-config.expand-env=true"]
+    environment:
+      - MINIO_USER=${MIMIR_USER}
+      - MINIO_PASSWORD=${MIMIR_PASSWORD}
+    volumes:
+      - ./config/mimir.yaml:/etc/mimir.yaml
+      - mimir:/data
+    depends_on:
+      - minio
+
+volumes:
+  minio:
+    external: false
+  mimir:
+    external: false
