@@ -4,11 +4,11 @@ common:
   storage:
     backend: s3
     s3:
-      endpoint: minio:9000
+      endpoint: ${MINIO_URL}
       access_key_id: ${MINIO_USER}
       secret_access_key: ${MINIO_PASSWORD}
-      insecure: true
-      bucket_name: mimir
+      insecure: false
+      bucket_name: ${MINIO_BUCKET}
 
 ingester:
   ring:

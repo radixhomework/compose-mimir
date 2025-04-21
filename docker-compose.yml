@@ -5,8 +5,10 @@ services:
       - "${MIMIR_PORT}:8080"
     command: ["-config.file=/etc/mimir.yaml", "-config.expand-env=true"]
     environment:
-      - MINIO_USER=${MIMIR_USER}
-      - MINIO_PASSWORD=${MIMIR_PASSWORD}
+      - MINIO_URL=${MINIO_URL}
+      - MINIO_USER=${MINIO_USER}
+      - MINIO_PASSWORD=${MINIO_PASSWORD}
+      - MINIO_BUCKET=${MINIO_BUCKET}
     volumes:
       - mimir:/data
     restart: always
