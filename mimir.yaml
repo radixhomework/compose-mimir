@@ -1,0 +1,31 @@
+target: all,overrides-exporter
+
+common:
+  storage:
+    backend: s3
+    s3:
+      endpoint: ${MINIO_URL}
+      access_key_id: ${MINIO_USER}
+      secret_access_key: ${MINIO_PASSWORD}
+      insecure: false
+      bucket_name: ${MINIO_BUCKET}
+
+ingester:
+  ring:
+    replication_factor: 1
+
+blocks_storage:
+  storage_prefix: blocks
+  tsdb:
+    dir: /data/ingester
+
+memberlist:
+  gossip_nodes: 1
+  join_members: [mimir]
+
+store_gateway:
+  sharding_ring:
+    replication_factor: 1
+
+server:
+  log_level: info
