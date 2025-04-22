@@ -3,7 +3,7 @@ services:
     build: .
     ports:
       - "${MIMIR_PORT}:8080"
-    command: ["-config.file=/etc/mimir.yaml", "-config.expand-env=true"]
+    command: ["-config.file=/etc/mimir.yaml", "-config.expand-env=true", "-auth.multitenancy-enabled=false"]
     environment:
       - MINIO_URL=${MINIO_URL}
       - MINIO_USER=${MINIO_USER}
